@@ -1,0 +1,70 @@
+{
+  "name": "chat-window",
+  "version": "1.0.10",
+  "private": true,
+  "scripts": {
+    "dev": "env-cmd -f ./env/.env.development next dev --port 3001",
+    "build": "env-cmd -f ./env/.env.development next build",
+    "start": "env-cmd -f ./env/.env.development next start",
+    "dev:qa": "env-cmd -f ./env/.env.qa next dev --port 3001",
+    "build:qa": "env-cmd -f ./env/.env.qa next build",
+    "start:qa": "env-cmd -f ./env/.env.qa next start --port 3100",
+    "dev:prod": "env-cmd -f ./env/.env.production next dev --port 3001",
+    "build:prod": "env-cmd -f ./env/.env.production next build",
+    "start:prod": "env-cmd -f ./env/.env.production next start",
+    "lint": "next lint",
+    "test": "jest --coverage",
+    "test:coverage": "jest --coverage",
+    "prepare": "husky && husky install",
+    "precommit": "yarn test && yarn build"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-react": "^7.24.7",
+    "@next/env": "^15.5.7",
+    "@reduxjs/toolkit": "^2.8.2",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
+    "axios": "^1.10.0",
+    "cross-env": "^7.0.3",
+    "crypto-js": "^4.2.0",
+    "emoji-picker-react": "^4.13.2",
+    "env-cmd": "^10.1.0",
+    "husky": "^9.1.7",
+    "lottie-web": "^5.13.0",
+    "moment-timezone": "^0.6.0",
+    "next": "15.5.7",
+    "notistack": "^3.0.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0",
+    "redux-persist-transform-encrypt": "^5.1.1",
+    "short-unique-id": "^5.3.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.4.6",
+    "@types/node": "24.0.10",
+    "@types/react": "19.1.8",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.7",
+    "jest": "^29.7.0",
+    "jest-canvas-mock": "^2.5.2",
+    "jest-environment-jsdom": "^29.7.0",
+    "tailwindcss": "^4",
+    "typescript": "5.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "jest"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}

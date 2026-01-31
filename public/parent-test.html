@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parent Application - PostMessage Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 5px;
+      }
+      button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s;
+      }
+      .btn-primary {
+        background: #007bff;
+        color: white;
+      }
+      .btn-success {
+        background: #28a745;
+        color: white;
+      }
+      .btn-warning {
+        background: #ffc107;
+        color: #212529;
+      }
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+      }
+      .btn-info {
+        background: #17a2b8;
+        color: white;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      #iframe {
+        width: 100%;
+        height: 600px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+      }
+
+      .log {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 5px;
+        max-height: 200px;
+        overflow-y: auto;
+        font-family: monospace;
+        font-size: 12px;
+      }
+
+      .log-entry {
+        margin-bottom: 5px;
+        padding: 5px;
+        border-left: 3px solid #007bff;
+        background: white;
+      }
+
+      .input-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin: 10px 0;
+      }
+
+      input,
+      textarea {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      textarea {
+        min-height: 60px;
+        resize: vertical;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🚀 Parent Application - PostMessage Test</h1>
+      <p>
+        This page demonstrates how to send data to the WhatsApp Chat Service UI
+        using postMessage.
+      </p>
+
+      <div class="controls">
+        <h3>Quick Actions:</h3>
+        <button class="btn-primary" onclick="sendAgentDetails()">
+          📤 Send Agent Details
+        </button>
+        <button class="btn-success" onclick="sendUserData()">
+          👥 Send User Data
+        </button>
+        <button class="btn-warning" onclick="sendConfiguration()">
+          ⚙️ Send Configuration
+        </button>
+        <button class="btn-info" onclick="sendChatCommand('SEND_MESSAGE')">
+          💬 Send Chat Command
+        </button>
+        <button class="btn-primary" onclick="sendSpecificPayload()">
+          🎯 Send Your Specific Payload
+        </button>
+        <button class="btn-danger" onclick="clearMessages()">
+          🗑️ Clear Messages
+        </button>
+      </div>
+
+      <div class="input-group">
+        <label>Custom Message:</label>
+        <textarea
+          id="customMessage"
+          placeholder='{"type": "CUSTOM", "payload": {"message": "Hello from parent!"}}'
+        ></textarea>
+        <button class="btn-primary" onclick="sendCustomMessage()">
+          Send Custom
+        </button>
+      </div>
+
+      <div class="input-group">
+        <label>Chat Message:</label>
+        <input
+          type="text"
+          id="chatMessage"
+          placeholder="Type a message to send to chat..."
+        />
+        <button class="btn-success" onclick="sendChatMessage()">
+          Send to Chat
+        </button>
+      </div>
+
+      <!-- The iframe that will contain your WhatsApp Chat UI -->
+      <iframe
+        id="iframe"
+        src="http://localhost:3001/chat?token=sample_token_123&agentId=12&roleId=13"
+        frameborder="0"
+      >
+      </iframe>
+
+      <div class="log" id="log">
+        <strong>📋 Message Log:</strong>
+        <div id="logEntries"></div>
+      </div>
+    </div>
+
+    <script>
+      const iframe = document.getElementById("iframe");
+      const logEntries = document.getElementById("logEntries");
+
+      // Listen for messages from the iframe
+      window.addEventListener("message", function (event) {
+        if (event.source === iframe.contentWindow) {
+          logMessage(
+            "📨 Received from iframe: " + JSON.stringify(event.data, null, 2),
+            "received"
+          );
+
+          // Handle specific message types
+          if (event.data && event.data.type === "CUSTOMER_SELECTED") {
+            handleCustomerSelection(event.data.payload);
+          }
+
+          if (event.data && event.data.type === "SEARCH_PERFORMED") {
+            handleSearchPerformed(event.data.payload);
+          }
+
+          if (event.data && event.data.type === "SEARCH_CLEARED") {
+            handleSearchCleared(event.data.payload);
+          }
+        }
+      });
+
+      // Handle customer selection from sidebar
+      function handleCustomerSelection(customerData) {
+        console.log("🎯 Customer selected:", customerData);
+
+        // Display customer selection in a dedicated area
+        displayCustomerSelection(customerData);
+
+        // You can add your custom logic here
+        // For example: update parent app state, make API calls, etc.
+      }
+
+      // Handle search performed from search box
+      function handleSearchPerformed(searchData) {
+        console.log("🔍 Search performed:", searchData);
+
+        // Display search query in a dedicated area
+        displaySearchQuery(searchData);
+
+        // You can add your custom logic here
+        // For example: log search analytics, update parent state, etc.
+      }
+
+      // Handle search cleared from search box
+      function handleSearchCleared(clearData) {
+        console.log("🧹 Search cleared:", clearData);
+
+        // Remove search display
+        const existingSearch = document.getElementById("searchQuery");
+        if (existingSearch) {
+          existingSearch.remove();
+        }
+
+        // You can add your custom logic here
+        // For example: reset parent state, clear filters, etc.
+      }
+
+      function displayCustomerSelection(customerData) {
+        const existingDisplay = document.getElementById("customerSelection");
+        if (existingDisplay) {
+          existingDisplay.remove();
+        }
+
+        const customerDisplay = document.createElement("div");
+        customerDisplay.id = "customerSelection";
+        customerDisplay.style.cssText = `
+          margin: 20px 0;
+          padding: 15px;
+          background: #e3f2fd;
+          border: 2px solid #2196f3;
+          border-radius: 8px;
+          font-family: monospace;
+        `;
+
+        customerDisplay.innerHTML = `
+          <h4 style="margin: 0 0 10px 0; color: #1976d2;">🎯 Selected Customer:</h4>
+          <p><strong>Customer ID:</strong> ${customerData.customerId}</p>
+          <p><strong>Customer Name:</strong> ${customerData.customerName}</p>
+          <p><strong>Session Status:</strong> ${
+            customerData.sessionStatus || "N/A"
+          }</p>
+          <p><strong>Unread Count:</strong> ${customerData.unreadCount || 0}</p>
+          <p><strong>Wait Time:</strong> ${customerData.waitTime || "N/A"}</p>
+          <p><strong>Last Interaction:</strong> ${
+            customerData.lastInteractionAt || "N/A"
+          }</p>
+          <p><strong>Selected At:</strong> ${new Date(
+            customerData.timestamp
+          ).toLocaleString()}</p>
+        `;
+
+        // Insert after controls
+        const controls = document.querySelector(".controls");
+        controls.parentNode.insertBefore(customerDisplay, controls.nextSibling);
+      }
+
+      function displaySearchQuery(searchData) {
+        const existingDisplay = document.getElementById("searchQuery");
+        if (existingDisplay) {
+          existingDisplay.remove();
+        }
+
+        const searchDisplay = document.createElement("div");
+        searchDisplay.id = "searchQuery";
+        searchDisplay.style.cssText = `
+          margin: 20px 0;
+          padding: 15px;
+          background: #f3e5f5;
+          border: 2px solid #9c27b0;
+          border-radius: 8px;
+          font-family: monospace;
+        `;
+
+        searchDisplay.innerHTML = `
+          <h4 style="margin: 0 0 10px 0; color: #7b1fa2;">🔍 Search Query:</h4>
+          <p><strong>Search String:</strong> "${searchData.searchString}"</p>
+          <p><strong>Search Type:</strong> ${searchData.searchType}</p>
+          <p><strong>Searched At:</strong> ${new Date(
+            searchData.timestamp
+          ).toLocaleString()}</p>
+        `;
+
+        // Insert after controls or customer selection
+        const controls = document.querySelector(".controls");
+        const customerSelection = document.getElementById("customerSelection");
+        const insertAfter = customerSelection || controls;
+        insertAfter.parentNode.insertBefore(
+          searchDisplay,
+          insertAfter.nextSibling
+        );
+      }
+
+      function logMessage(message, type = "sent") {
+        const entry = document.createElement("div");
+        entry.className = "log-entry";
+        entry.style.borderLeftColor =
+          type === "received" ? "#28a745" : "#007bff";
+        entry.innerHTML = `<small>${new Date().toLocaleTimeString()}</small><br>${message}`;
+        logEntries.appendChild(entry);
+        logEntries.scrollTop = logEntries.scrollHeight;
+      }
+
+      function sendMessage(data) {
+        iframe.contentWindow.postMessage(data, "*");
+        logMessage("📤 Sent: " + JSON.stringify(data, null, 2));
+      }
+
+      function sendAgentDetails() {
+        const agentData = {
+          type: "AGENT_DETAILS",
+          payload: {
+            userId: 123,
+            agentId: 123,
+            userName: "John Doe",
+            userEmail: "john.doe@example.com",
+            mobileNumber: "+1234567890",
+            authorizationToken: "bearer-token-123456789",
+            roleId: [1, 2],
+            moduleId: [10, 20],
+            isVerified: true,
+            isTncAccepted: true,
+            isReadOnly: false,
+          },
+        };
+        sendMessage(agentData);
+      }
+
+      function sendUserData() {
+        const userData = {
+          type: "USER_DATA",
+          payload: {
+            customerId: 456,
+            customerName: "Jane Smith",
+            customerEmail: "jane.smith@example.com",
+            customerPhone: "+9876543210",
+            preferences: {
+              language: "en",
+              notifications: true,
+            },
+          },
+        };
+        sendMessage(userData);
+      }
+
+      function sendConfiguration() {
+        const config = {
+          type: "CONFIGURATION",
+          payload: {
+            theme: "light",
+            autoRefresh: true,
+            refreshInterval: 10000,
+            features: {
+              aiSuggestions: true,
+              fileUpload: true,
+              voiceMessages: false,
+            },
+            apiEndpoints: {
+              chat: "https://api.example.com/chat",
+              upload: "https://api.example.com/upload",
+            },
+          },
+        };
+        sendMessage(config);
+      }
+
+      function sendChatCommand(command) {
+        let payload = {};
+
+        switch (command) {
+          case "SEND_MESSAGE":
+            payload = {
+              message:
+                "Hello! This message was sent from the parent application.",
+            };
+            break;
+          case "CLEAR_INPUT":
+            payload = {};
+            break;
+          case "UPDATE_CUSTOMER":
+            payload = { customerId: 789, customerName: "Bob Wilson" };
+            break;
+        }
+
+        const commandData = {
+          type: "CHAT_COMMAND",
+          command: command,
+          payload: payload,
+        };
+        sendMessage(commandData);
+      }
+
+      function sendCustomMessage() {
+        const customText = document.getElementById("customMessage").value;
+        if (!customText.trim()) {
+          alert("Please enter a custom message JSON");
+          return;
+        }
+
+        try {
+          const customData = JSON.parse(customText);
+          sendMessage(customData);
+        } catch (error) {
+          alert("Invalid JSON format: " + error.message);
+        }
+      }
+
+      function sendChatMessage() {
+        const message = document.getElementById("chatMessage").value;
+        if (!message.trim()) {
+          alert("Please enter a message");
+          return;
+        }
+
+        sendChatCommand("SEND_MESSAGE");
+        // Update the payload with the actual message
+        const commandData = {
+          type: "CHAT_COMMAND",
+          command: "SEND_MESSAGE",
+          payload: { message: message },
+        };
+        sendMessage(commandData);
+
+        document.getElementById("chatMessage").value = "";
+      }
+
+      function sendSpecificPayload() {
+        // This is the exact payload structure you provided
+        const specificData = {
+          userId: 20,
+          userName: "CC10010010",
+          name: "Yogesh",
+          userEmail: "example_yogesh.ambilwade@earlysalary.com",
+          mobileNumber: 8000067414,
+          agencyId: 1,
+          agencyCode: "CA10000",
+          userManagedAgencyMap: {
+            1: "FIBE",
+          },
+          isVerified: true,
+          agentId: 20,
+          userID: 20,
+          authorizationToken:
+            "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjIwLCJlbWFpbCI6ImV4YW1wbGVfeW9nZXNoLmFtYmlsd2FkZUBlYXJseXNhbGFyeS5jb20iLCJpZCI6MTc1NzA1MDE3MjMzMiwiaWF0IjoxNzU3MDUwMTcyLCJleHAiOjE3NTcwNzkwMDB9.AG3t_YEkmSMHox5gzWREWRImjwkOdtHH2N4LUTW947U",
+          impersonated: {},
+          roleId: 12,
+          role: "Tele-Caller",
+          moduleId: [
+            1, 2, 4, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 0, 24, 33,
+            26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 41, 42, 43, 70,
+            71, 72, 74,
+          ],
+          isReadOnly: false,
+          isTncAccepted: false,
+          level: 7,
+          canImpersonate: false,
+          session: {
+            statusCode: "200",
+            statusMessage: "Token verified successfully",
+            token: "1757051549593_bLnqaQ0jh5oizcegEO4xg9F08LpqFjimFtYDylV6QV8",
+            team: "COLLECTION",
+            agentId: "20",
+            createdAt: "2025-09-05T05:52:29.593308214Z",
+            expiresAt: "2025-09-05T06:02:29.593339410Z",
+            valid: true,
+          },
+        };
+
+        sendMessage(specificData);
+        console.log(
+          "🎯 Sent specific payload with session token:",
+          specificData.session.token
+        );
+      }
+
+      function clearMessages() {
+        logEntries.innerHTML = "";
+        logMessage("🧹 Log cleared");
+      }
+
+      // Send initial data when iframe loads
+      iframe.onload = function () {
+        setTimeout(() => {
+          console.log("🎯 Iframe loaded, sending initial agent details...");
+          sendAgentDetails();
+        }, 1000);
+      };
+    </script>
+  </body>
+</html>

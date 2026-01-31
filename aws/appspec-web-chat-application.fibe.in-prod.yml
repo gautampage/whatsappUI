@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/anup.borde/web-chat-application.fibe.in-prod
+hooks:
+  AfterInstall:
+    - location: deploy.sh
+      timeout: 600
+      runas: root

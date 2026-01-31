@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "Installing dependencies"
+
+  build:
+    commands:
+      - echo "Building and exporting Next.js app"
+      - cp aws/appspec-web-chat-application-qa.fibe.in-qa.yml appspec.yml
+      - cp aws/script-web-chat-application-qa.fibe.in-qa.sh deploy.sh
+
+artifacts:
+  type: zip
+  files:
+    - appspec.yml
+    - deploy.sh
+  discard-paths: true

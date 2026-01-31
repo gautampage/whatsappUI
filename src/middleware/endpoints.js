@@ -1,0 +1,17 @@
+export const Endpoints = {
+  UNREAD_MESSAGE_COUNT: `${process.env.NEXT_PUBLIC_ES_ENV}/get-data`,
+  READ_MESSAGE: `${process.env.NEXT_PUBLIC_ES_ENV}/read`,
+  GET_MESSAGE: `${process.env.NEXT_PUBLIC_ES_ENV}/get-message`,
+  SEND_MESSAGE: `${process.env.NEXT_PUBLIC_ES_ENV}/send-message`,
+  // GET_CUSTOMER_DETAILED_INFO: `/collection${process.env.NEXT_PUBLIC_ES_ENV}/accounts`,
+  GET_CUSTOMER_DETAILED_INFO: `${process.env.NEXT_PUBLIC_ES_ENV}/cust-info`,
+  RECENT_MESSAGE: `${process.env.NEXT_PUBLIC_ES_ENV}/recent-message`,
+  LLM_RESPONSE: `${process.env.NEXT_PUBLIC_ES_ENV}/llm-response`,
+  UNASSIGNED_MESSAGE: `${process.env.NEXT_PUBLIC_ES_ENV}/get-unassigned-message`,
+  PAYMENT_LINK: `${process.env.NEXT_PUBLIC_ES_ENV}/paymentLink`,
+  SYNOPSIS: `${process.env.NEXT_PUBLIC_ES_ENV}/get-synopsis`,
+  ACTIVE_AGENTS_LIST: `${process.env.NEXT_PUBLIC_ES_ENV}/active-list`,
+  CAMPAIGN_LIST: `${process.env.NEXT_PUBLIC_ES_ENV}/campaign-list`,
+  ACCESS_DETAILS: `${process.env.NEXT_PUBLIC_ES_ENV}/access-details`,
+  DISPOSITION: `${process.env.NEXT_PUBLIC_ES_ENV}/disposition`,
+};

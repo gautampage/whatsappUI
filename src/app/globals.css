@@ -1,0 +1,145 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* WhatsApp Web Colors */
+  --wa-background: #111b21;
+  --wa-background-light: #f0f2f5;
+  --wa-panel-background: #ffffff;
+  --wa-panel-background-dark: #202c33;
+  --wa-chat-background: #efeae2;
+  --wa-chat-background-dark: #0b141a;
+  --wa-sidebar-background: #f8f9fa;
+  --wa-sidebar-background-dark: #111b21;
+  
+  /* Text Colors */
+  --wa-text-primary: #111b21;
+  --wa-text-secondary: #667781;
+  --wa-text-light: #8696a0;
+  --wa-text-white: #ffffff;
+  
+  /* Message Bubble Colors */
+  --wa-message-out: #d9fdd3;
+  --wa-message-in: #ffffff;
+  --wa-message-out-dark: #005c4b;
+  --wa-message-in-dark: #202c33;
+  
+  /* Accent Colors */
+  --wa-green: #00a884;
+  --wa-green-dark: #008069;
+  --wa-blue: #53bdeb;
+  --wa-border: #e9edef;
+  --wa-border-dark: #2a3942;
+  
+  /* Status Colors */
+  --wa-unread: #25d366;
+  --wa-online: #25d366;
+  --wa-hover: #f5f6f6;
+  --wa-hover-dark: #2a3942;
+}
+
+body {
+  background: var(--wa-background-light);
+  color: var(--wa-text-primary);
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+hr {
+  border-color: var(--wa-border);
+}
+
+/* WhatsApp specific classes */
+.wa-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #8696a0 transparent;
+}
+
+.wa-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.wa-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wa-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #8696a0;
+  border-radius: 3px;
+}
+
+hr {
+  color: #ddd !important;
+  height: 1px !important;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.chat-background {
+  background-image: url("/bg-2.png");
+  background-repeat: repeat;
+  background-size: auto;
+  background-color: #efeae2; /* WhatsApp-style beige */
+}
+
+/* Professional Loader Animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 1.5s linear infinite;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
